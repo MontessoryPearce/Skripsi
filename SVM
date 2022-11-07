@@ -1,0 +1,31 @@
+degree = 0
+daftarkernel = ["poly","sigmoid","rbf"]
+print ("1. poly")
+print ("2. sigmoid")
+print ("3. rbf")
+kernel = int(input("masukkan pilihan :"))
+if kernel == 1 :
+  degree = int(input("masukkan degree :"))
+# if kernel == 3 :
+#   degree = degree * 2
+print (daftarkernel[kernel-1])
+import pandas as pd
+saham = pd.read_csv('MNCN.csv')
+
+x = saham.drop(['date','Keterangan'], axis=1)
+y = saham['Keterangan']
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.4)
+
+from sklearn.svm import SVC
+svclassifier = SVC(kernel= daftarkernel[kernel-1], degree=degree, C=0.6)
+svclassifier.fit(x_train, y_train)
+
+y_predict = svclassifier.predict(x_test)
+print (y_predict)
+
+from sklearn.metrics import classification_report, confusion_matrix
+print(confusion_matrix(y_test, y_predict))
+
+print(classification_report(y_test, y_predict))
